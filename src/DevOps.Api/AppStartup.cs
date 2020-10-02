@@ -7,7 +7,7 @@ using Xerris.DotNet.Core;
 using Xerris.DotNet.Core.Aws.IoC;
 using Xerris.DotNet.Core.Cache;
 
-namespace Sizing.Poker.Api
+namespace DevOps.Api
 {
     public class AppStartup : IAppStartup
     {

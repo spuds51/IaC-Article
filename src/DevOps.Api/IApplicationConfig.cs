@@ -2,7 +2,7 @@ using Amazon.Extensions.NETCore.Setup;
 using Xerris.DotNet.Core;
 using Xerris.DotNet.Core.Aws.Secrets;
 
-namespace Sizing.Poker.Api
+namespace DevOps.Api
 {
     public interface IApplicationConfig
     {

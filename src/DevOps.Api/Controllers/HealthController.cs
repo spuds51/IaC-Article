@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
+using DevOps.Api.Service;
 using Microsoft.AspNetCore.Mvc;
-using Sizing.Poker.Api.Service;
 
-namespace Sizing.Poker.Api.Controllers
+namespace DevOps.Api.Controllers
 { 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class HealthController  : ControllerBase
     {
         private readonly IHealthCheckService healthCheckService;

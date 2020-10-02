@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Sizing.Poker.Api.Test
+namespace DevOps.Api.Test
 {
     public class UnitTest1
     {

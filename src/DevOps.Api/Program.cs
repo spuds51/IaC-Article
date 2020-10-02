@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Sizing.Poker.Api
+namespace DevOps.Api
 {
     public class Program
     {

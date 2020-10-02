@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Sizing.Poker.Api.Service
+namespace DevOps.Api.Service
 {
     public interface IHealthCheckService
     {
