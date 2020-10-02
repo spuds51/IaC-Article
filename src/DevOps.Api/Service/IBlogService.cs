@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DevOps.Api.Models;
 
@@ -12,7 +13,7 @@ namespace DevOps.Api.Service
     {
         public Task<BlogPost> PostBlog()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,43 +14,49 @@ namespace DevOps.Api
     {
         public IConfiguration StartUp(IServiceCollection collection)
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console(outputTemplate:
-                    "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-                .CreateLogger();
-            
             Log.Information(Banner.Next());
-            
+
             var builder = new ApplicationConfigurationBuilder<ApplicationConfig>();
             var appConfig = builder.Build();
             collection.AddSingleton<IApplicationConfig>(appConfig);
             collection.AddDefaultAWSOptions(appConfig.AwsOptions);
             collection.AddAWSService<IAmazonDynamoDB>();
             collection.AddLazyProviderFor<IAmazonDynamoDB>();
-            
+
             collection.AddSecretProvider(appConfig.SecretConfigurations);
-            collection.AddSingleton<ICache>(new WaitToFinishMemoryCache(2,10));
+            collection.AddSingleton<ICache>(new WaitToFinishMemoryCache(2, 10));
             collection.AutoRegister(GetType().Assembly);
-            
+
             return builder.Configuration;
         }
+
+        public void InitializeLogging(IConfiguration configuration, Action<IConfiguration> defaultConfig)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console(outputTemplate:
+                    "[{Timestamp:HH:mm:ss} {Level}] {Message:lj}{NewLine}{Exception}")
+                .CreateLogger();
+        }
     }
-    
+
     public static class Banner
     {
         private static readonly List<string> All = new List<string>
         {
-            Aardvark, Bat, Bear, Bird, Bison, Camel, Cat, Clown, Dog, Bunny, Rhino, Spider, Unicorn, Whinnie, Southpark, Hobbes, Whale
+            Aardvark, Bat, Bear, Bird, Bison, Camel, Cat, Clown, Dog, Bunny, Rhino, Spider, Unicorn, Whinnie, Southpark,
+            Hobbes, Whale
         };
-        
+
         public static string Next()
         {
             var rnd = new Random();
             var next = rnd.Next(0, All.Count);
             return All[next];
         }
-        
+
         #region creatures
+
         private const string Aardvark = @"
                    ,
              (`.  : \               __..----..__
@@ -69,6 +75,7 @@ namespace DevOps.Api
                          ,'::'  /:::|        ,'::::/_/    `. ``-.__
            jrei         ''''   (//|/\      ,';':,-'         `-.__  `'--..__
                                                                  `''---::::'";
+
         private const string Bat = @"
   #
    ##
@@ -114,6 +121,7 @@ namespace DevOps.Api
                                     ###
           The Dutch Dude            ##
           T.vanEck@fontys.nl        #";
+
         private const string Bear = @"
         (()__(()
         /       \ 
@@ -127,6 +135,7 @@ namespace DevOps.Api
      \  \      (      /
       )  '._____)    /    
    (((____.--(((____/mrf";
+
         private const string Bird = @"
            _ _.-''''''--._
          .` `.  ...------.\     /'''''''''''\ 
@@ -146,6 +155,7 @@ namespace DevOps.Api
               `..     '   \ \
                  `\ \fsr   `-
                    \/ ";
+
         private const string Bison = @"
                                     ___,,___
                                 ,d8888888888b,_
@@ -172,6 +182,7 @@ namespace DevOps.Api
         q8 8b        888        `8888'
          888                     `q88b
          888'";
+
         private const string Camel = @"
                      .--.      .'  `.
                    .' . :\    /   :  L
@@ -210,6 +221,7 @@ namespace DevOps.Api
           J L        \ \     F \   F |
            L\         \ \   J   | J   L
           /__\_________)_`._)_  |_/   \_____";
+
         private const string Cat = @"
                       _                        
                       \`*-.                    
@@ -226,6 +238,7 @@ namespace DevOps.Api
                         ; '   : :`-:     _.`* ;
                [bug] .*' /  .*' ; .*`- +'  `*' 
                      `*-*   `*-*  `*-*'        ";
+
         private const string Dog = @"
            ____,'`-, 
       _,--'   ,/::.; 
@@ -249,6 +262,7 @@ namespace DevOps.Api
     -hrr-      `--.__, ,::.         ::' 
                    |:  ::::.       ::' 
                    |:  ::::::    ,::' ";
+
         private const string Bunny = @"
                (`.         ,-,
                `\ `.    ,;' /
@@ -264,6 +278,7 @@ namespace DevOps.Api
      `._ ,  '   /_
         ; ,''-,;' ``-
          ``-..__\``--` ";
+
         private const string Rhino = @"
                                            ,-.             __
                                          ,'   `---.___.---'  `.
@@ -280,6 +295,7 @@ namespace DevOps.Api
                            / ,    ,'         \   /`             \   /
                            \__   /           _) (               _) (
                              `--'           /____\             /____\ ";
+
         private const string Spider = @"
            ;               ,           
          ,;                 '.         
@@ -313,6 +329,7 @@ namespace DevOps.Api
 -hrr-     ';              ,;'           
             ""'           '""             
               ' ";
+
         private const string Whinnie = @"
                            <\              _
                             \\          _/{
@@ -331,6 +348,7 @@ namespace DevOps.Api
                          <+       \\
                           \\      WWW
                           MMM";
+
         private const string Hobbes = @"
            ( ).---.( )
           ./.=""'""=.\.
@@ -353,6 +371,7 @@ namespace DevOps.Api
           __|_=_|=___|  `\`\_/./`'
          (((__(((_____)   `.__/
 ";
+
         private const string Southpark = @"
             .- <O> -.        .-====-.      ,-------.      .-=<>=-.
            /_-\'''/-_\      / / '' \ \     |,-----.|     /__----__\
@@ -364,7 +383,8 @@ namespace DevOps.Api
          \_-----'____--/  (_)        (_) (_)_______(_)   |___:|____|
           \___________/     |________|     \_______/     |_________|
 ";
-private const string Unicorn = @"
+
+        private const string Unicorn = @"
                                                     /
                                                   .7
                                        \       , //
@@ -405,6 +425,7 @@ private const string Unicorn = @"
          ('`    \
           `-.___/
 ";
+
         private const string Clown = @"
                                   ,;;;;;;,
                                 ,;;;'""""`;;\
@@ -448,6 +469,7 @@ private const string Unicorn = @"
                       """"""      /.`\
                                \|_/
          ";
+
         private const string Whale = @"
      .-'
 '--./ /     _.---.
@@ -456,6 +478,7 @@ private const string Unicorn = @"
     `,.__.   ,__.--/
       '._/_.'___.-`
 ";
+
         #endregion
     }
 }

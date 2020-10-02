@@ -3,10 +3,10 @@ using DevOps.Api.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevOps.Api.Controllers
-{ 
+{
     [ApiController]
     [Route("[controller]")]
-    public class HealthController  : ControllerBase
+    public class HealthController : ControllerBase
     {
         private readonly IHealthCheckService healthCheckService;
 

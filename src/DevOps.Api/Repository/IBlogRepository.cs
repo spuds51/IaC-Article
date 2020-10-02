@@ -14,10 +14,11 @@ namespace DevOps.Api.Repository
 
     public class BlogRepository : BaseRepository<BlogPost>, IBlogRepository
     {
-        public BlogRepository(ILazyProvider<IAmazonDynamoDB> clientProvider, string tableName) : base(clientProvider, tableName)
+        public BlogRepository(ILazyProvider<IAmazonDynamoDB> clientProvider, string tableName) : base(clientProvider,
+            tableName)
         {
         }
-        
+
         public async Task<BlogPost> Save(BlogPost blogPost)
         {
             blogPost.Id = Guid.NewGuid().ToString("N");
