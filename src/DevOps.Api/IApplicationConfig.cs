@@ -6,6 +6,7 @@ namespace DevOps.Api
 {
     public interface IApplicationConfig
     {
+        string BlogPostTableName { get; }
         SecretConfigCollection SecretConfigurations { get; }
     }
 
@@ -13,5 +14,6 @@ namespace DevOps.Api
     {
         public SecretConfigCollection SecretConfigurations { get; set; }
         public AWSOptions AwsOptions { get; set; }
+        public string BlogPostTableName { get; set; }
     }
 }

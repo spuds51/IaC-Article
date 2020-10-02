@@ -14,8 +14,8 @@ namespace DevOps.Api.Repository
 
     public class BlogRepository : BaseRepository<BlogPost>, IBlogRepository
     {
-        public BlogRepository(ILazyProvider<IAmazonDynamoDB> clientProvider, string tableName) : base(clientProvider,
-            tableName)
+        public BlogRepository(IApplicationConfig config, ILazyProvider<IAmazonDynamoDB> clientProvider)
+            : base(clientProvider, config.BlogPostTableName)
         {
         }
 

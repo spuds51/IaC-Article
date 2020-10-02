@@ -17,9 +17,9 @@ namespace DevOps.Api.Controllers
         }
 
         [HttpGet("ping")]
-        public async Task<ActionResult<BlogPost>> PostBlog()
+        public async Task<ActionResult<BlogPost>> PostBlog([FromBody] BlogPost blogPost)
         {
-            var result = await blogService.PostBlog();
+            var result = await blogService.PostBlog(blogPost);
             return Ok(result);
         }
     }
