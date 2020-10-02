@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Amazon.DynamoDBv2;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -24,6 +25,8 @@ namespace DevOps.Api
             var appConfig = builder.Build();
             collection.AddSingleton<IApplicationConfig>(appConfig);
             collection.AddDefaultAWSOptions(appConfig.AwsOptions);
+            collection.AddAWSService<IAmazonDynamoDB>();
+            collection.AddLazyProviderFor<IAmazonDynamoDB>();
             
             collection.AddSecretProvider(appConfig.SecretConfigurations);
             collection.AddSingleton<ICache>(new WaitToFinishMemoryCache(2,10));
