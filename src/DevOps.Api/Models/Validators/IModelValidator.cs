@@ -15,8 +15,7 @@ namespace DevOps.Api.Models.Validators
             Validate.Begin()
                 .IsNotNull(blogPost, "blogPost is required").Check()
                 .IsNotEmpty(blogPost.Author, nameof(blogPost.Author))
-                .IsNotEmpty(blogPost.Author, nameof(blogPost.Article))
-                .IsNotEmpty(blogPost.Id, nameof(blogPost.Id))
+                .IsNotEmpty(blogPost.Article, nameof(blogPost.Article))
                 .GreaterThan(blogPost.PostedDate, DateTime.MinValue, "Has PostedDate")
                 .Check();
         }
