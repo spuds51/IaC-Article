@@ -7,7 +7,7 @@ namespace DevOps.Cdk
         public static void Main(string[] args)
         {
             var app = new App();
-            new CdkStack(app, "CdkStack");
+            new BlogPostStack(app, "Xerris-DevOps-Stack");
             app.Synth();
         }
     }
