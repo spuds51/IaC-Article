@@ -11,6 +11,8 @@
 *.sln.docstates
 *serilog*.txt
 
+cdk.out/
+
 *.DotSettings
 
 # User-specific files (MonoDevelop/Xamarin Studio)
