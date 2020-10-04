@@ -1,4 +1,5 @@
 ﻿using Amazon.CDK;
+using Xerris.DotNet.Core;
 
 namespace DevOps.Cdk
 {
@@ -7,7 +8,8 @@ namespace DevOps.Cdk
         public static void Main(string[] args)
         {
             var app = new App();
-            new BlogPostStack(app, "Xerris-DevOps-Stack");
+            var platformConfig = new ApplicationConfigurationBuilder<PlatformConfig>().Build();
+            new BlogPostStack(app,  platformConfig, "Xerris-DevOps-Stack");
             app.Synth();
         }
     }
