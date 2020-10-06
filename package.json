@@ -1,20 +1,26 @@
 {
-  "name": "dev-ops-article-source",
+  "name": "xerris-dev-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "AWS Lambdas that support a simple BlogPost site",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -R dist & dotnet build src/DevOps.Api/DevOps.Api.csproj -o dist"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xerris/IaC-Article.git"
-  },
-  "author": "",
+  "author": "Xerris Inc.",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/xerris/IaC-Article/issues"
+  "homepage": "https://xerris.com",
+  "dependencies": {
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.2.0",
+    "gulp-zip": "^5.0.1",
+    "mkdirp": "^0.5.1",
+    "npm": "^6.14.2",
+    "path": "^0.12.7",
+    "shell": "^0.5.0",
+    "yargs": "^14.2.0"
   },
-  "homepage": "https://github.com/xerris/IaC-Article#readme"
+  "devDependencies": {
+    "gulp-dotnet-cli": "^1.1.0"
+  }
 }
