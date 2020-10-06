@@ -1,0 +1,20 @@
+{
+  "name": "dev-ops-article-source",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -R dist & dotnet build src/DevOps.Api/DevOps.Api.csproj -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerris/IaC-Article.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xerris/IaC-Article/issues"
+  },
+  "homepage": "https://github.com/xerris/IaC-Article#readme"
+}
