@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using Amazon.CDK;
 using Amazon.CDK.AWS.S3;
+using Environment = Amazon.CDK.Environment;
 
 namespace DevOps.Cdk
 {
@@ -10,6 +13,13 @@ namespace DevOps.Cdk
             IStackProps props = null) : base(scope, id, props)
         {
             props = CreateProps(platformConfig);
+
+            var projectRoot = Path.GetFullPath(Path.Combine(System.Environment.CurrentDirectory, @"../../../../.."));
+            var lambdaZip = Path.Combine(System.Environment.CurrentDirectory, platformConfig.LambdaPackage);
+
+            Console.WriteLine($"project Root: {projectRoot}");
+            Console.WriteLine($"Lambda zip location: {lambdaZip}");
+            
             var bucket = new Bucket(this, "xerris-dev-ops-bucket", new BucketProps
             {
                 Versioned = false,

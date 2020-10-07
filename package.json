@@ -4,7 +4,10 @@
   "description": "AWS Lambdas that support a simple BlogPost site",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": " rm -R dist",
+    "package": "gulp Package",
+    "deploy": "rm -r dist & gulp Package & cdk deploy --profile xerris"
   },
   "author": "Xerris Inc.",
   "license": "ISC",
