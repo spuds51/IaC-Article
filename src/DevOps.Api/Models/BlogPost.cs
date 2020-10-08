@@ -11,8 +11,21 @@ namespace DevOps.Api.Models
         public string Author { get; set; }
         public string Article { get; set; }
         
-        [DynamoDBProperty("TaskStatusLastUpdate")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [DynamoDBProperty("PostedDate")]
+        [JsonConverter(typeof(JsonDateTimeConvertor))]
         public DateTime PostedDate { get; set; }
+    }
+    
+    public class JsonDateTimeConvertor : DateTimeConverterBase
+    {
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return DateTime.Parse(reader.Value?.ToString()!);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue( ((DateTime)value).ToString("yyyy-MM-dd") );
+        }
     }
 }

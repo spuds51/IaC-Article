@@ -12,6 +12,7 @@ namespace DevOps.Api.Repository
     {
         Task<BlogPost> Save(BlogPost blogPost);
         Task<IEnumerable<BlogPost>> GetAllPosts();
+        Task<BlogPost> FindById(string blogId);
     }
 
     public class BlogRepository : BaseRepository<BlogPost>, IBlogRepository
@@ -30,8 +31,14 @@ namespace DevOps.Api.Repository
 
         public Task<IEnumerable<BlogPost>> GetAllPosts()
         {
-            var all = base.FindAllAsync<BlogPost>();
+            var all = FindAllAsync<BlogPost>();
             return all;
+        }
+
+        public async Task<BlogPost> FindById(string blogId)
+        {
+            var found = await base.FindById(blogId);
+            return found;
         }
     }
 }

@@ -37,8 +37,28 @@ namespace DevOps.Cdk
                     Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::PostBlog",
                     Timeout = Duration.Seconds(60)
                 });
+            
+            var getAllPostsLambda = new Function(this, "getAllPosts", new FunctionProps
+                {
+                    Code = Code.FromAsset(lambdaZip),
+                    Runtime = Runtime.DOTNET_CORE_3_1,
+                    FunctionName = "getAllPosts",
+                    Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::GetAllBlogPosts",
+                    Timeout = Duration.Seconds(60)
+                });
+            
+            var getBlogPostById = new Function(this, "getById", new FunctionProps
+                {
+                    Code = Code.FromAsset(lambdaZip),
+                    Runtime = Runtime.DOTNET_CORE_3_1,
+                    FunctionName = "getById",
+                    Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::GetPostById",
+                    Timeout = Duration.Seconds(60)
+                });
 
-            table.GrantFullAccess(postLambda);
+            table.AllowReadWrite(postLambda);
+            table.AllowRead(getAllPostsLambda);
+            table.AllowRead(getBlogPostById);
             
             var restApi = new RestApi(this, "xerris-blog-api", new RestApiProps
             {
@@ -46,9 +66,18 @@ namespace DevOps.Cdk
                 Description = "Api endpoints for the Blogging System",
                 RestApiName = "xerris-blog-api"
             });
+            
+            var blogResource = restApi.Root.AddResource("blog");
 
             var postBlogIntegration = new LambdaIntegration(postLambda, new LambdaIntegrationOptions());
-            restApi.Root.AddResource("blog").AddMethod("POST", postBlogIntegration);
+            blogResource.AddMethod("POST", postBlogIntegration);
+            
+            var getAllIntegration = new LambdaIntegration(getAllPostsLambda, new LambdaIntegrationOptions());
+            blogResource.AddMethod("GET", getAllIntegration);
+            
+            var findByIdIntegration = new LambdaIntegration(getBlogPostById, new LambdaIntegrationOptions());
+            blogResource.AddResource("{id}")
+                        .AddMethod("GET", findByIdIntegration);
         }
 
         private static IStackProps CreateProps(PlatformConfig platformConfig)

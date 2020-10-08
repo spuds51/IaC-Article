@@ -46,7 +46,7 @@ namespace DevOps.Api.Test.Handlers
             blogService.Setup(x => x.GetAllPosts())
                        .ReturnsAsync(results);
             
-            var response = await handler.GetAllPosts(new APIGatewayProxyRequest());
+            var response = await handler.GetAllBlogPosts(new APIGatewayProxyRequest());
 
             Validate.Begin()
                 .IsNotNull(response, "response").Check();

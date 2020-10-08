@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DevOps.Api.Models;
@@ -11,6 +10,7 @@ namespace DevOps.Api.Service
     {
         Task<BlogPost> PostBlog(BlogPost blogPost);
         Task<IEnumerable<BlogPost>> GetAllPosts();
+        Task<BlogPost> GetById(string blogId);
     }
 
     public class BlogService : IBlogService
@@ -35,6 +35,12 @@ namespace DevOps.Api.Service
         {
             var allPosts = await repository.GetAllPosts();
             return allPosts;
+        }
+
+        public async Task<BlogPost> GetById(string blogId)
+        {
+            var blog = await repository.FindById(blogId);
+            return blog;
         }
     }
 }
