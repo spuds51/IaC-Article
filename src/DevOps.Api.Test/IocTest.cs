@@ -19,7 +19,7 @@ namespace DevOps.Api.Test
         public void ApplicationConfig()
         {
            var appConfig = Has<IApplicationConfig>();
-           appConfig.BlogPostTableName.Should().Be("BlogPosts");
+           appConfig.BlogPostTableName.Should().Be("MyBlogPosts");
         }
 
         [Fact]

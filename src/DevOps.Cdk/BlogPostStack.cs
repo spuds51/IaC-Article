@@ -35,10 +35,11 @@ namespace DevOps.Cdk
                     Code = Code.FromAsset(lambdaZip),
                     Runtime = Runtime.DOTNET_CORE_3_1,
                     FunctionName = "postBlog",
-                    Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::PostBlog"
+                    Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::PostBlog",
+                    Timeout = Duration.Seconds(60)
                 });
 
-            table.GrantWriteData(postLambda);
+            table.GrantFullAccess(postLambda);
             
             var restApi = new RestApi(this, "xerris-blog-api", new RestApiProps
             {
