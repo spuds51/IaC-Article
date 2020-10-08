@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": " rm -R dist",
-    "package": "gulp Package",
-    "deploy": "rm -r dist & gulp Package & cdk deploy --profile xerris"
+    "package": "rm -r dist & gulp Package",
+    "deploy": "dotnet build & cdk deploy --profile xerris"
   },
   "author": "Xerris Inc.",
   "license": "ISC",
