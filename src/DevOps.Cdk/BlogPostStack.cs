@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Amazon.CDK;
-using Amazon.CDK.AWS.S3;
+using Amazon.CDK.AWS.Lambda;
 using Environment = Amazon.CDK.Environment;
 
 namespace DevOps.Cdk
@@ -20,13 +20,12 @@ namespace DevOps.Cdk
             Console.WriteLine($"project Root: {projectRoot}");
             Console.WriteLine($"Lambda zip location: {lambdaZip}");
             
-            var bucket = new Bucket(this, "xerris-dev-ops-bucket", new BucketProps
-            {
-                Versioned = false,
-                BucketName = "xerris-dev-ops-bucket",
-                PublicReadAccess = false,
-                RemovalPolicy = RemovalPolicy.DESTROY
-            });
+            var postLambda = new Function(this, "postBlog", new FunctionProps
+                {
+                    Code = Code.FromAsset(lambdaZip),
+                    Runtime = Runtime.DOTNET_CORE_3_1,
+                    Handler = "DevOps.Api::DevOps.Api"
+                });
         }
 
         private static IStackProps CreateProps(PlatformConfig platformConfig)

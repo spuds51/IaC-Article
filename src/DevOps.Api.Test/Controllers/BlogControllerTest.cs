@@ -1,7 +1,9 @@
-using DevOps.Api.Controllers;
+using Amazon.Lambda.APIGatewayEvents;
+using DevOps.Api.Handlers;
 using DevOps.Api.Models;
 using DevOps.Api.Service;
 using Moq;
+using Xerris.DotNet.Core.Extensions;
 using Xerris.DotNet.TestAutomation;
 using Xerris.DotNet.TestAutomation.Factory;
 using Xunit;
@@ -12,13 +14,13 @@ namespace DevOps.Api.Test.Controllers
     public class BlogControllerTest : MockBase
     {
         private readonly Mock<IBlogService> blogService;
-        private readonly BlogController controller;
+        private readonly BlogHandler handler;
 
         public BlogControllerTest()
         {
             blogService = Strict<IBlogService>();
 
-            controller = new BlogController(blogService.Object);
+            handler = new BlogHandler(blogService.Object);
         }
 
         [Fact]
@@ -26,10 +28,12 @@ namespace DevOps.Api.Test.Controllers
         {
             var blogPost = FactoryGirl.Build<BlogPost>();
 
-            blogService.Setup(x => x.PostBlog(blogPost))
+            blogService.Setup(x => x.PostBlog(It.Is<BlogPost>(x => x.Matches(blogPost))))
                        .ReturnsAsync(blogPost);
 
-            controller.PostBlog(blogPost);
+            var request = new APIGatewayProxyRequest {Body = blogPost.ToJson()};
+            
+            handler.PostBlog(request);
         }
     }
 }
