@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using DevOps.Api.Models;
@@ -10,6 +11,7 @@ namespace DevOps.Api.Repository
     public interface IBlogRepository
     {
         Task<BlogPost> Save(BlogPost blogPost);
+        Task<IEnumerable<BlogPost>> GetAllPosts();
     }
 
     public class BlogRepository : BaseRepository<BlogPost>, IBlogRepository
@@ -24,6 +26,12 @@ namespace DevOps.Api.Repository
             blogPost.Id = Guid.NewGuid().ToString("N");
             await SaveAsync(blogPost);
             return blogPost;
+        }
+
+        public Task<IEnumerable<BlogPost>> GetAllPosts()
+        {
+            var all = base.FindAllAsync<BlogPost>();
+            return all;
         }
     }
 }

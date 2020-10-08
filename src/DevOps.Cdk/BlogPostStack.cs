@@ -7,7 +7,6 @@ using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 using Environment = Amazon.CDK.Environment;
 using Amazon.CDK.AWS.DynamoDB;
 using Amazon.CDK.AWS.Lambda;
-using Amazon.CDK.AWS.S3;
 
 namespace DevOps.Cdk
 {
@@ -49,15 +48,7 @@ namespace DevOps.Cdk
             });
 
             var postBlogIntegration = new LambdaIntegration(postLambda, new LambdaIntegrationOptions());
-            restApi.Root.AddResource("blog")
-                .AddMethod("POST", postBlogIntegration);
-
-            var bucket = new Bucket(this, "xerris-dev-ops-bucket", new BucketProps
-            {
-                BucketName = "xerris-dev-ops-bucket",
-                RemovalPolicy = RemovalPolicy.DESTROY,
-                Versioned = false
-            });
+            restApi.Root.AddResource("blog").AddMethod("POST", postBlogIntegration);
         }
 
         private static IStackProps CreateProps(PlatformConfig platformConfig)

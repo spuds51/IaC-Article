@@ -29,5 +29,12 @@ namespace DevOps.Api.Handlers
             var result = await blogService.PostBlog(request.Body.FromJson<BlogPost>());
             return result.Ok();
         }
+
+        [LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
+        public async Task<APIGatewayProxyResponse> GetAllPosts(APIGatewayProxyRequest request)
+        {
+            var allPosts = await blogService.GetAllPosts();
+            return allPosts.Ok();
+        }
     }
 }

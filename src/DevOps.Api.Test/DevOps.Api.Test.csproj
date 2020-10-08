@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DevOps.Apix\DevOps.Apix.csproj" />
       <ProjectReference Include="..\DevOps.Api\DevOps.Api.csproj" />
     </ItemGroup>
 

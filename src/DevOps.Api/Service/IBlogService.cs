@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DevOps.Api.Models;
 using DevOps.Api.Models.Validators;
@@ -8,6 +10,7 @@ namespace DevOps.Api.Service
     public interface IBlogService
     {
         Task<BlogPost> PostBlog(BlogPost blogPost);
+        Task<IEnumerable<BlogPost>> GetAllPosts();
     }
 
     public class BlogService : IBlogService
@@ -26,6 +29,12 @@ namespace DevOps.Api.Service
             validator.ValidateBlogPost(blogPost);
             var saved = await repository.Save(blogPost);
             return saved;
+        }
+
+        public async Task<IEnumerable<BlogPost>> GetAllPosts()
+        {
+            var allPosts = await repository.GetAllPosts();
+            return allPosts;
         }
     }
 }
