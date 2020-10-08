@@ -10,6 +10,7 @@ namespace DevOps.Cdk
         public string Account { get; set; }
         public string Region { get; set; }
         public string LambdaPackage { get; set; }
+        public string BlogPostTableName { get; set; }
         public string StackName => $"DevOps-{Environment}";
     }
 }

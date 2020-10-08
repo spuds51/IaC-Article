@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Amazon.CDK;
+using Amazon.CDK.AWS.APIGateway;
+using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
+using Environment = Amazon.CDK.Environment;
+using Amazon.CDK.AWS.DynamoDB;
 using Amazon.CDK.AWS.Lambda;
 using Amazon.CDK.AWS.S3;
-using Environment = Amazon.CDK.Environment;
 
 namespace DevOps.Cdk
 {
@@ -19,6 +22,14 @@ namespace DevOps.Cdk
 
             Console.WriteLine($"Lambda zip location: {lambdaZip}");
             
+            var table = new Table(this, "xerris-blog-post", new TableProps
+            {
+                TableName  = platformConfig.BlogPostTableName,
+                BillingMode = BillingMode.PAY_PER_REQUEST,
+                PartitionKey = new Attribute { Name = "Id", Type = AttributeType.STRING },
+                RemovalPolicy = RemovalPolicy.DESTROY
+            });
+            
             var postLambda = new Function(this, "postBlog", new FunctionProps
                 {
                     Code = Code.FromAsset(lambdaZip),
@@ -26,7 +37,20 @@ namespace DevOps.Cdk
                     FunctionName = "postBlog",
                     Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::PostBlog"
                 });
+
+            table.GrantWriteData(postLambda);
             
+            var restApi = new RestApi(this, "xerris-blog-api", new RestApiProps
+            {
+                Deploy = true,
+                Description = "Api endpoints for the Blogging System",
+                RestApiName = "xerris-blog-api"
+            });
+
+            var postBlogIntegration = new LambdaIntegration(postLambda, new LambdaIntegrationOptions());
+            restApi.Root.AddResource("blog")
+                .AddMethod("POST", postBlogIntegration);
+
             var bucket = new Bucket(this, "xerris-dev-ops-bucket", new BucketProps
             {
                 BucketName = "xerris-dev-ops-bucket",
