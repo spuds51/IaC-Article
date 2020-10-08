@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": " rm -R dist",
     "package": "rm -r dist & gulp Package",
-    "deploy": "dotnet build & cdk deploy --profile xerris"
+    "deploy": "npm run package && dotnet build && cdk deploy --profile xerris",
+    "destroy": "cdk destroy --profile xerris"
   },
   "author": "Xerris Inc.",
   "license": "ISC",
