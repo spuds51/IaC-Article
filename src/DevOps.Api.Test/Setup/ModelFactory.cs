@@ -13,7 +13,7 @@ namespace DevOps.Api.Test.Setup
             {
                 Author = "Albert Einstein",
                 Article = "E = mc2",
-                PostedDate = new DateTime(1905, 11, 21)
+                PostedDate = new DateTime(1905, 11, 21).ToString("yyyy-MM-dd")
             });
         }
     }

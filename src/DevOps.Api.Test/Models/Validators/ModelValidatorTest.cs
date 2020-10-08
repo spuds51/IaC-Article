@@ -41,7 +41,8 @@ namespace DevOps.Api.Test.Models.Validators
         [Fact]
         public void BadPostedDate()
         {
-            Invalid(FactoryGirl.Build<BlogPost>(x => x.PostedDate = DateTime.MinValue));
+            Invalid(FactoryGirl.Build<BlogPost>(x => x.PostedDate = string.Empty));
+            Invalid(FactoryGirl.Build<BlogPost>(x => x.PostedDate = null));
         }
 
         private void Invalid(BlogPost badBlogPost)
