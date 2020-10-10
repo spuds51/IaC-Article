@@ -36,7 +36,13 @@ namespace DevOps.Api.Test.Handlers
 
             var request = new APIGatewayProxyRequest {Body = blogPost.ToJson()};
             
-            await handler.PostBlog(request);
+            var response = await handler.PostBlog(request);
+            Validate.Begin()
+                    .IsNotNull(response, "response").Check()
+                    .IsNotEmpty(response.Body, nameof(response.Body)).Check()
+                    .IsNotNull(response.Body.FromJson<BlogPost>(), "blogPost")
+                    .Check();
+            
         }
 
         [Fact]
