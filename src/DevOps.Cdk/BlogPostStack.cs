@@ -17,10 +17,6 @@ namespace DevOps.Cdk
         {
             props = CreateProps(platformConfig);
 
-            var lambdaZip = Path.Combine(System.Environment.CurrentDirectory, platformConfig.LambdaPackage);
-
-            Console.WriteLine($"Lambda zip location: {lambdaZip}");
-
             var blogPostTable = new Table(this, "xerris-blog-post", new TableProps
             {
                 TableName = platformConfig.BlogPostTableName,
@@ -29,35 +25,19 @@ namespace DevOps.Cdk
                 RemovalPolicy = RemovalPolicy.DESTROY
             });
 
-            var postLambda = new Function(this, "postBlog", new FunctionProps
-            {
-                Code = Code.FromAsset(lambdaZip),
-                Runtime = Runtime.DOTNET_CORE_3_1,
-                FunctionName = "postBlog",
-                Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::PostBlog",
-                Timeout = Duration.Seconds(60)
-            });
+            var lambdaPackage = Path.Combine(System.Environment.CurrentDirectory, platformConfig.LambdaPackage);
 
-            var getAllPostsLambda = new Function(this, "getAllPosts", new FunctionProps
-            {
-                Code = Code.FromAsset(lambdaZip),
-                Runtime = Runtime.DOTNET_CORE_3_1,
-                FunctionName = "getAllPosts",
-                Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::GetAllBlogPosts",
-                Timeout = Duration.Seconds(60)
-            });
+            var saveBlogPostLambda = CreateFunction("postBlog", lambdaPackage,
+                "DevOps.Api::DevOps.Api.Handlers.BlogHandler::PostBlog", 45);
 
-            var getBlogPostById = new Function(this, "getById", new FunctionProps
-            {
-                Code = Code.FromAsset(lambdaZip),
-                Runtime = Runtime.DOTNET_CORE_3_1,
-                FunctionName = "getById",
-                Handler = "DevOps.Api::DevOps.Api.Handlers.BlogHandler::GetPostById",
-                Timeout = Duration.Seconds(60)
-            });
+            var getAllBlogPostsLambda = CreateFunction("getAllPosts", lambdaPackage,
+                "DevOps.Api::DevOps.Api.Handlers.BlogHandler::GetAllBlogPosts", 45);
 
-            blogPostTable.AllowReadWrite(postLambda);
-            blogPostTable.AllowRead(getAllPostsLambda);
+            var getBlogPostById = CreateFunction("getById", lambdaPackage,
+                "DevOps.Api::DevOps.Api.Handlers.BlogHandler::GetPostById" ,45);
+
+            blogPostTable.AllowReadWrite(saveBlogPostLambda);
+            blogPostTable.AllowRead(getAllBlogPostsLambda);
             blogPostTable.AllowRead(getBlogPostById);
 
             var restApi = new RestApi(this, "xerris-blog-api", new RestApiProps
@@ -69,15 +49,27 @@ namespace DevOps.Cdk
 
             var blogResource = restApi.Root.AddResource("blog");
 
-            var postBlogIntegration = new LambdaIntegration(postLambda, new LambdaIntegrationOptions());
+            var postBlogIntegration = new LambdaIntegration(saveBlogPostLambda, new LambdaIntegrationOptions());
             blogResource.AddMethod("POST", postBlogIntegration);
 
-            var getAllIntegration = new LambdaIntegration(getAllPostsLambda, new LambdaIntegrationOptions());
+            var getAllIntegration = new LambdaIntegration(getAllBlogPostsLambda, new LambdaIntegrationOptions());
             blogResource.AddMethod("GET", getAllIntegration);
 
             var findByIdIntegration = new LambdaIntegration(getBlogPostById, new LambdaIntegrationOptions());
             blogResource.AddResource("{id}")
                 .AddMethod("GET", findByIdIntegration);
+        }
+
+        private Function CreateFunction(string name, string lambdaPackage, string handler, int timeout)
+        {
+            return new Function(this, name, new FunctionProps
+            {
+                Code = Code.FromAsset(lambdaPackage),
+                Runtime = Runtime.DOTNET_CORE_3_1,
+                FunctionName = name,
+                Handler = handler,
+                Timeout = Duration.Seconds(timeout)
+            });
         }
 
         private static IStackProps CreateProps(PlatformConfig platformConfig)
